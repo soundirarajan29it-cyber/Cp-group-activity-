@@ -1,0 +1,208 @@
+Program
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+struct Train {
+    int trainNo;
+    char trainName[50];
+    char source[30];
+    char destination[30];
+    int seats;
+};
+
+
+void addTrain();
+void displayTrains();
+void bookTicket();
+void cancelTicket();
+
+
+int main() {
+    int choice;
+
+
+    do {
+        printf("\n====== RAILWAY RESERVATION SYSTEM ======\n");
+        printf("1. Add Train\n");
+        printf("2. Display Trains\n");
+        printf("3. Book Ticket\n");
+        printf("4. Cancel Ticket\n");
+        printf("0. Exit\n");
+        printf("=======================================\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+
+        switch (choice) {
+            case 1: addTrain(); break;
+            case 2: displayTrains(); break;
+            case 3: bookTicket(); break;
+            case 4: cancelTicket(); break;
+            case 0: printf("Exiting program...\n"); break;
+            default: printf("Invalid choice!\n");
+        }
+    } while (choice != 0);
+
+
+    return 0;
+}
+
+
+/* ADD TRAIN */
+void addTrain() {
+    FILE *fp;
+    struct Train t;
+
+
+    fp = fopen("trains.txt", "a");
+
+
+    printf("Enter Train Number: ");
+    scanf("%d", &t.trainNo);
+    printf("Enter Train Name: ");
+    scanf("%s", t.trainName);
+    printf("Enter Source: ");
+    scanf("%s", t.source);
+    printf("Enter Destination: ");
+    scanf("%s", t.destination);
+    printf("Enter Available Seats: ");
+    scanf("%d", &t.seats);
+
+
+    fprintf(fp, "%d %s %s %s %d\n",
+            t.trainNo, t.trainName, t.source, t.destination, t.seats);
+
+
+    fclose(fp);
+    printf("Train added successfully!\n");
+}
+
+
+/* DISPLAY TRAINS */
+void displayTrains() {
+    FILE *fp;
+    struct Train t;
+
+
+    fp = fopen("trains.txt", "r");
+    if (fp == NULL) {
+        printf("No train records found.\n");
+        return;
+    }
+
+
+    printf("\nTrainNo  Name        Source      Destination Seats\n");
+    printf("---------------------------------------------------\n");
+
+
+    while (fscanf(fp, "%d %s %s %s %d",
+                  &t.trainNo, t.trainName, t.source,
+                  t.destination, &t.seats) != EOF) {
+
+
+        printf("%-7d %-10s %-11s %-12s %-5d\n",
+               t.trainNo, t.trainName, t.source,
+               t.destination, t.seats);
+    }
+
+
+    fclose(fp);
+}
+
+
+/* BOOK TICKET */
+void bookTicket() {
+    FILE *fp, *temp;
+    struct Train t;
+    int trainNo, found = 0;
+
+
+    fp = fopen("trains.txt", "r");
+    temp = fopen("temp.txt", "w");
+
+
+    if (fp == NULL) {
+        printf("No train records found.\n");
+        return;
+    }
+
+
+    printf("Enter Train Number to Book Ticket: ");
+    scanf("%d", &trainNo);
+
+
+    while (fscanf(fp, "%d %s %s %s %d",
+                  &t.trainNo, t.trainName, t.source,
+                  t.destination, &t.seats) != EOF) {
+
+
+        if (t.trainNo == trainNo && t.seats > 0) {
+            t.seats--;
+            found = 1;
+            printf("Ticket booked successfully!\n");
+        }
+
+
+        fprintf(temp, "%d %s %s %s %d\n",
+                t.trainNo, t.trainName, t.source,
+                t.destination, t.seats);
+    }
+
+
+    fclose(fp);
+    fclose(temp);
+    remove("trains.txt");
+    rename("temp.txt", "trains.txt");
+
+
+    if (!found)
+        printf("Train not found or no seats available.\n");
+}
+
+
+/* CANCEL TICKET */
+void cancelTicket() {
+    FILE *fp, *temp;
+    struct Train t;
+    int trainNo, found = 0;
+
+
+    fp = fopen("trains.txt", "r");
+    temp = fopen("temp.txt", "w");
+
+
+    printf("Enter Train Number to Cancel Ticket: ");
+    scanf("%d", &trainNo);
+
+
+    while (fscanf(fp, "%d %s %s %s %d",
+                  &t.trainNo, t.trainName, t.source,
+                  t.destination, &t.seats) != EOF) {
+
+
+        if (t.trainNo == trainNo) {
+            t.seats++;
+            found = 1;
+            printf("Ticket cancelled successfully!\n");
+        }
+
+
+        fprintf(temp, "%d %s %s %s %d\n",
+                t.trainNo, t.trainName, t.source,
+                t.destination, t.seats);
+    }
+
+
+    fclose(fp);
+    fclose(temp);
+    remove("trains.txt");
+    rename("temp.txt", "trains.txt");
+
+
+    if (!found)
+        printf("Train not found.\n");
+}
