@@ -1,0 +1,55 @@
+Sample Output
+
+
+====== RAILWAY RESERVATION SYSTEM ======
+1. Add Train
+2. Display Trains
+3. Book Ticket
+4. Cancel Ticket
+0. Exit
+=======================================
+Enter your choice: 1
+Enter Train Number: 12001
+Enter Train Name: Express
+Enter Source: Chennai
+Enter Destination: Bangalore
+Enter Available Seats: 100
+Train added successfully!
+
+
+Enter your choice: 1
+Enter Train Number: 12627
+Enter Train Name: Superfast
+Enter Source: Madurai
+Enter Destination: Chennai
+Enter Available Seats: 80
+Train added successfully!
+
+
+Enter your choice: 2
+TrainNo  Name        Source      Destination Seats
+---------------------------------------------------
+12001   Express     Chennai     Bangalore    100
+12627   Superfast   Madurai     Chennai      80
+
+
+Enter your choice: 3
+Enter Train Number to Book Ticket: 12001
+Ticket booked successfully!
+
+
+Enter your choice: 2
+TrainNo  Name        Source      Destination Seats
+---------------------------------------------------
+12001   Express     Chennai     Bangalore    99
+12627   Superfast   Madurai     Chennai      80
+
+
+Enter your choice: 4
+Enter Train Number to Cancel Ticket: 12001
+Ticket cancelled successfully!
+
+
+Enter your choice: 0
+Exiting program…
+
